@@ -2,11 +2,7 @@ import makeSlug from "slug";
 import { Clock } from "../../clock";
 import { Note, NoteRepository } from "./model";
 import { IdGenerator } from "../../incrementIdGenerator";
-
-type NoteInput = {
-  title: string;
-  description: string;
-};
+import { NoteInput } from "./parseNoteInput";
 
 export const createNote =
   (

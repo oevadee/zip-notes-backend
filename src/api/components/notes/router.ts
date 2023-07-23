@@ -5,6 +5,7 @@ import omit from "lodash.omit";
 import { clock } from "../../clock";
 import { incrementIdGenerator } from "../../incrementIdGenerator";
 import { createNote } from "./createNote";
+import { NoteInput } from "./parseNoteInput";
 
 export const notesRouter = Router();
 
@@ -30,7 +31,7 @@ notesRouter.get("/api/notes/:slug", async (req, res, next) => {
 });
 
 notesRouter.post("/api/notes", async (req, res, next) => {
-  const input = req.body.note;
+  const input = NoteInput.parse(req.body.note);
 
   const note = await createNote(noteRepository, noteIdGenerator, clock)(input);
   res.json({ note: omit(note, "id") });
