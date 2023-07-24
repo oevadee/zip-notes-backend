@@ -16,7 +16,11 @@ const findManyNotes = (request: Request) =>
 const findNoteBySlug = (request: Request, slug: string) =>
   request.get(`/api/notes/${slug}`).expect(200);
 
-const createNote = (request: Request, note: NoteInput, status = 200) =>
+const createNote = (
+  request: Request,
+  note: NoteInput,
+  status = 200,
+) =>
   request.post("/api/notes").send({ note }).expect(status);
 
 const deleteNoteBySlug = (request: Request, slug: string) =>
@@ -29,6 +33,7 @@ describe("App", () => {
     const createdNote = await createNote(request, {
       title: "Test title",
       description: "Test description",
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       invalidField: "ignore me",
     });
@@ -39,14 +44,14 @@ describe("App", () => {
         title: "Test title",
         description: "Test description",
         slug: "test-title",
-      }
+      },
     );
 
     const allNotes = await findManyNotes(request);
 
     assert.deepStrictEqual(
       allNotes.body.notes.map((note: Note) =>
-        omit(note, "createdAt", "updatedAt")
+        omit(note, "createdAt", "updatedAt"),
       ),
       [
         {
@@ -54,29 +59,38 @@ describe("App", () => {
           description: "Test description",
           slug: "test-title",
         },
-      ]
+      ],
     );
 
-    const specificNote = await findNoteBySlug(request, "test-title");
+    const specificNote = await findNoteBySlug(
+      request,
+      "test-title",
+    );
 
     assert.deepStrictEqual(
-      omit(specificNote.body.note, "createdAt", "updatedAt"),
+      omit(
+        specificNote.body.note,
+        "createdAt",
+        "updatedAt",
+      ),
       {
         title: "Test title",
         description: "Test description",
         slug: "test-title",
-      }
+      },
     );
 
     await deleteNoteBySlug(request, "test-title");
 
-    const allNotesAfterDelete = await findManyNotes(request);
+    const allNotesAfterDelete = await findManyNotes(
+      request,
+    );
 
     assert.deepStrictEqual(
       allNotesAfterDelete.body.notes.map((note: Note) =>
-        omit(note, "createdAt", "updatedAt")
+        omit(note, "createdAt", "updatedAt"),
       ),
-      []
+      [],
     );
   });
 });

@@ -8,7 +8,7 @@ export const createNote =
   (
     noteRepository: NoteRepository,
     noteIdGenerator: IdGenerator,
-    clock: Clock
+    clock: Clock,
   ) =>
   async (input: NoteInput) => {
     const now = clock();

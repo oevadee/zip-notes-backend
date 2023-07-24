@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
 import { notesRouter } from "./api/components/notes/router";
-import { errorHandler, notFoundHandler } from "./errorHandler";
+import {
+  errorHandler,
+  notFoundHandler,
+} from "./errorHandler";
 
 export const app = express();
 app.use(cors());

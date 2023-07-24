@@ -1,6 +1,8 @@
 export type IdGenerator = () => string;
 
-export const incrementIdGenerator = <T>(formatter: (n: number) => T) => {
+export const incrementIdGenerator = <T>(
+  formatter: (n: number) => T,
+) => {
   let id = 0;
   return () => formatter(id++);
 };
