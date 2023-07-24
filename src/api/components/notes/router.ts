@@ -21,30 +21,47 @@ notesRouter.get("/api/notes", async (req, res, next) => {
 notesRouter.get("/api/notes/:slug", async (req, res, next) => {
   const slug = req.params.slug;
 
-  const existingNote = await noteRepository.findBySlug(slug);
+  try {
+    const existingNote = await noteRepository.findBySlug(slug);
 
-  if (!existingNote) {
-    throw new NotFoundError(`Note with slug: ${slug} does not exist`);
+    if (!existingNote) {
+      throw new NotFoundError(`Note with slug: ${slug} does not exist`);
+    }
+
+    res.json({ note: omit(existingNote, "id") });
+  } catch (err) {
+    next(err);
   }
-
-  res.json({ note: omit(existingNote, "id") });
 });
 
 notesRouter.post("/api/notes", async (req, res, next) => {
-  const input = NoteInput.parse(req.body.note);
+  try {
+    const input = NoteInput.parse(req.body.note);
 
-  const note = await createNote(noteRepository, noteIdGenerator, clock)(input);
-  res.json({ note: omit(note, "id") });
+    const note = await createNote(
+      noteRepository,
+      noteIdGenerator,
+      clock
+    )(input);
+
+    res.json({ note: omit(note, "id") });
+  } catch (err) {
+    next(err);
+  }
 });
 
 notesRouter.delete("/api/notes/:slug", async (req, res, next) => {
   const slug = req.params.slug;
 
-  const existingNote = await noteRepository.deleteBySlug(slug);
+  try {
+    const existingNote = await noteRepository.deleteBySlug(slug);
 
-  if (!existingNote) {
-    throw new NotFoundError(`Note with slug: ${slug} does not exist`);
+    if (!existingNote) {
+      throw new NotFoundError(`Note with slug: ${slug} does not exist`);
+    }
+
+    res.json({ note: omit(existingNote, "id") });
+  } catch (err) {
+    next(err);
   }
-
-  res.json({ note: omit(existingNote, "id") });
 });
