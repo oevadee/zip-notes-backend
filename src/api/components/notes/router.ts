@@ -1,5 +1,4 @@
 import { Router } from "express";
-import omit from "lodash.omit";
 
 import { inMemoryNoteRepository } from "./inMemoryRepository";
 import { NotFoundError } from "../../NotFoundError";
@@ -16,11 +15,7 @@ const noteIdGenerator = incrementIdGenerator(String);
 notesRouter.get("/api/notes", async (req, res, next) => {
   const notes = await noteRepository.findMany();
 
-  res.send({
-    notes: Object.values(notes).map((note) =>
-      omit(note, "id"),
-    ),
-  });
+  res.send({ notes: Object.values(notes) });
 });
 
 notesRouter.get(
@@ -39,7 +34,7 @@ notesRouter.get(
         );
       }
 
-      res.json({ note: omit(existingNote, "id") });
+      res.json({ note: existingNote });
     } catch (err) {
       next(err);
     }
@@ -56,7 +51,7 @@ notesRouter.post("/api/notes", async (req, res, next) => {
       clock,
     )(input);
 
-    res.json({ note: omit(note, "id") });
+    res.json({ note });
   } catch (err) {
     next(err);
   }
@@ -78,7 +73,7 @@ notesRouter.delete(
         );
       }
 
-      res.json({ note: omit(existingNote, "id") });
+      res.json({ note: existingNote });
     } catch (err) {
       next(err);
     }

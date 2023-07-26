@@ -42,6 +42,7 @@ describe("App", () => {
     assert.deepStrictEqual(
       omit(createdNote.body.note, "createdAt", "updatedAt"),
       {
+        id: "0",
         title: "Test title",
         description: "Test description",
       },
@@ -55,6 +56,7 @@ describe("App", () => {
       ),
       [
         {
+          id: "0",
           title: "Test title",
           description: "Test description",
         },
@@ -70,6 +72,7 @@ describe("App", () => {
         "updatedAt",
       ),
       {
+        id: "0",
         title: "Test title",
         description: "Test description",
       },
