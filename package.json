@@ -18,7 +18,7 @@
   "license": "ISC",
   "husky": {
     "hooks": {
-      "pre-commit": "npx --no-install lint-staged"
+      "pre-commit": "npx --no-install lint-staged && npm test"
     }
   },
   "lint-staged": {
