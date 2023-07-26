@@ -1,7 +1,8 @@
 import httpClient from "supertest";
 import assert from "assert";
-import { app } from "../app";
 import omit from "lodash.omit";
+
+import { app } from "../app";
 import { Note } from "../api/components/notes/model";
 
 type NoteInput = {
@@ -13,8 +14,8 @@ type Request = ReturnType<typeof httpClient>;
 const findManyNotes = (request: Request) =>
   request.get("/api/notes").expect(200);
 
-const findNoteBySlug = (request: Request, slug: string) =>
-  request.get(`/api/notes/${slug}`).expect(200);
+const findNoteById = (request: Request, id: string) =>
+  request.get(`/api/notes/${id}`).expect(200);
 
 const createNote = (
   request: Request,
@@ -23,8 +24,8 @@ const createNote = (
 ) =>
   request.post("/api/notes").send({ note }).expect(status);
 
-const deleteNoteBySlug = (request: Request, slug: string) =>
-  request.delete(`/api/notes/${slug}`).expect(200);
+const deleteNoteById = (request: Request, id: string) =>
+  request.delete(`/api/notes/${id}`).expect(200);
 
 describe("App", () => {
   it("Note api journey", async () => {
@@ -43,7 +44,6 @@ describe("App", () => {
       {
         title: "Test title",
         description: "Test description",
-        slug: "test-title",
       },
     );
 
@@ -57,15 +57,11 @@ describe("App", () => {
         {
           title: "Test title",
           description: "Test description",
-          slug: "test-title",
         },
       ],
     );
 
-    const specificNote = await findNoteBySlug(
-      request,
-      "test-title",
-    );
+    const specificNote = await findNoteById(request, "0");
 
     assert.deepStrictEqual(
       omit(
@@ -76,11 +72,10 @@ describe("App", () => {
       {
         title: "Test title",
         description: "Test description",
-        slug: "test-title",
       },
     );
 
-    await deleteNoteBySlug(request, "test-title");
+    await deleteNoteById(request, "0");
 
     const allNotesAfterDelete = await findManyNotes(
       request,

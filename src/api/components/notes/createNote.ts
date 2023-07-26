@@ -1,4 +1,3 @@
-import makeSlug from "slug";
 import { Clock } from "../../clock";
 import { Note, NoteRepository } from "./model";
 import { IdGenerator } from "../../incrementIdGenerator";
@@ -15,7 +14,6 @@ export const createNote =
     const note: Note = {
       title: input.title,
       description: input.description,
-      slug: makeSlug(input.title),
       id: noteIdGenerator(),
       createdAt: now,
       updatedAt: now,

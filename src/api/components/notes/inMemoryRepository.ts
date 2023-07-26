@@ -8,9 +8,9 @@ export const inMemoryNoteRepository =
       async findMany() {
         return notes;
       },
-      async findBySlug(slug) {
+      async findById(id) {
         const note = Object.values(notes).find(
-          (note) => note.slug === slug,
+          (note) => note.id === id,
         );
 
         return note ?? null;
@@ -18,9 +18,9 @@ export const inMemoryNoteRepository =
       async create(note) {
         notes[note.id] = note;
       },
-      async deleteBySlug(slug) {
+      async deleteById(id) {
         const note = Object.values(notes).find(
-          (note) => note.slug === slug,
+          (note) => note.id === id,
         );
 
         if (note) {

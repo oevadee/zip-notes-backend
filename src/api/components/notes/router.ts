@@ -1,7 +1,8 @@
 import { Router } from "express";
+import omit from "lodash.omit";
+
 import { inMemoryNoteRepository } from "./inMemoryRepository";
 import { NotFoundError } from "../../NotFoundError";
-import omit from "lodash.omit";
 import { clock } from "../../clock";
 import { incrementIdGenerator } from "../../incrementIdGenerator";
 import { createNote } from "./createNote";
@@ -23,18 +24,18 @@ notesRouter.get("/api/notes", async (req, res, next) => {
 });
 
 notesRouter.get(
-  "/api/notes/:slug",
+  "/api/notes/:id",
   async (req, res, next) => {
-    const slug = req.params.slug;
+    const id = req.params.id;
 
     try {
-      const existingNote = await noteRepository.findBySlug(
-        slug,
+      const existingNote = await noteRepository.findById(
+        id,
       );
 
       if (!existingNote) {
         throw new NotFoundError(
-          `Note with slug: ${slug} does not exist`,
+          `Note with id: ${id} does not exist`,
         );
       }
 
@@ -62,17 +63,18 @@ notesRouter.post("/api/notes", async (req, res, next) => {
 });
 
 notesRouter.delete(
-  "/api/notes/:slug",
+  "/api/notes/:id",
   async (req, res, next) => {
-    const slug = req.params.slug;
+    const id = req.params.id;
 
     try {
-      const existingNote =
-        await noteRepository.deleteBySlug(slug);
+      const existingNote = await noteRepository.deleteById(
+        id,
+      );
 
       if (!existingNote) {
         throw new NotFoundError(
-          `Note with slug: ${slug} does not exist`,
+          `Note with id: ${id} does not exist`,
         );
       }
 
